@@ -1,12 +1,14 @@
 import './App.css';
-import LandingPage from './components/LandingPage';
+import Header from './components/Header';
+import LandingPage from './features/LandingPage';
 
-function App() {
+const App = () => {
   return (
     <div className="App">
-      <body className="App-Container">
+      <header className="App-Container">
+        <Header />
         <LandingPage />  
-      </body>
+      </header>
     </div>
   );
 }
