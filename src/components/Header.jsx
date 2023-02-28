@@ -4,9 +4,10 @@ const Header = () => {
             marginTop: '3vh',
             marginRight: '2%',
             textAlign: 'right',
+            textShadow: '2px 2px black',
         },
         headerText: { 
-            fontWeight: 'bold',
+            fontWeight: 900,
             fontSize: '150%',
         }
     }

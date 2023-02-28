@@ -1,6 +1,6 @@
 import './App.css';
 import Header from './components/Header';
-import LandingPage from './features/LandingPage';
+import LandingPage from './views/LandingPage';
 
 const App = () => {
   return (
