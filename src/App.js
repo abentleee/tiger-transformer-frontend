@@ -1,12 +1,13 @@
-// import logo from './logo.svg';
 import './App.css';
+import Header from './components/Header';
+import LandingPage from './views/LandingPage';
 
-function App() {
+const App = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
-        <p>Hello World</p>
+      <header className="App-Container">
+        <Header />
+        <LandingPage />  
       </header>
     </div>
   );
