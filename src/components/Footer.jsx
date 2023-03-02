@@ -1,7 +1,7 @@
 const Footer = () => { 
     const styles = { 
         container: { 
-            marginBottom: '3vh',
+            marginBottom: '4vh',
             display: 'flex',
             alignContent: 'center',
             justifyContent: 'center',
