@@ -1,6 +1,7 @@
 import Button from '../components/Button';
+import { Link } from 'react-router-dom';
 
-const LandingPage = () => {
+const NotFound = () => {
     const styles = {
         container: { 
             flex: 1,
@@ -16,24 +17,25 @@ const LandingPage = () => {
         placeholderText: { 
             textAlign: 'left',
             fontWeight: 'bold',
+            paddingBottom: '2%',
             textShadow: '2px 2px black',
         },
+        linkStyle: {
+            textDecoration: 'none',
+        }
     }
 
     return (
         <div style={styles.container}>
             <div style={styles.placeholderText}>
-                Placeholder text explaining how to use the transformer tool,
-                including links to contract(s) on Blockscout. 
-                
-                Here's a few more sentences with some nonsense words 
-                to fill out the description a bit more.    
+                Link Not Found!
             </div>
-            <Button 
-                text={'Connect Wallet'}
-                onClick={() => console.log('wallet connection button pressed!')}
-            />
+            <div>
+                <Link to={'/'} style={styles.linkStyle}>
+                    <Button text={'Home'} />
+                </Link>
+            </div>
         </div>
     );
 }
-export default LandingPage;
+export default NotFound;
