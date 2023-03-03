@@ -4,10 +4,10 @@ import { getProvider } from '../services/Web3Service';
 
 const LandingPage = () => {
     const navigate = useNavigate();
-    const provider = getProvider();
 
     const connectToMetamask = async () => { 
         try {         
+            const provider = getProvider();
             const accounts = await provider.send("eth_requestAccounts", []);
             console.log(`accounts: ${JSON.stringify(accounts)}`)
             navigate('/list-all', {state: { selectedAccount: accounts[0]}, provider })
