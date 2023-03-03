@@ -23,9 +23,14 @@ const LandingPage = () => {
     return (
         <div style={styles.container}>
             <div style={styles.placeholderText}>
-                Placeholder text explaining how to use the transformer tool, including links to contract(s) on Blockscout.  Here's a few more sentences with some nonsense words to fill out the description a bit more.    
+                Placeholder text explaining how to use the transformer tool,
+                including links to contract(s) on Blockscout. 
+                
+                Here's a few more sentences with some nonsense words 
+                to fill out the description a bit more.    
             </div>
             <Button 
+                text={'Connect Wallet'}
                 onClick={() => console.log('wallet connection button pressed!')}
             />
         </div>

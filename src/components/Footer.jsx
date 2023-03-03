@@ -8,26 +8,40 @@ const Footer = () => {
         },
         linkText: { 
             textAlign: 'center',
-            fontSize: '75%',
+            fontSize: '60%',
             fontWeight: 'bold',
             textDecoration: 'underline',
         },
         footerText: { 
             textAlign: 'center',
-            fontSize: '75%',
+            fontSize: '60%',
             fontWeight: 'bold',
         }
     }
     return (
         <div style={styles.container}>
             <div style={styles.linkText}>
-                <a href={'/todo'} style={{color: '#FFFFFF'}}>https://linktr.ee/tigers</a>
+                <a 
+                    href={'https://linktr.ee/xdaitigers'} 
+                    style={{color: '#FFFFFF'}}
+                    target='_blank'
+                    rel='noreferrer'
+                >
+                    https://linktr.ee/xdaitigers
+                </a>
             </div>
             <div style={styles.footerText}>
                 &nbsp;|&nbsp;
             </div>
             <div style={styles.linkText}>
-                <a href={'/todo'} style={{color: '#FFFFFF'}}>Discord Invite</a>
+                <a 
+                    href={'https://discord.gg/hh4yemqw'} 
+                    style={{color: '#FFFFFF'}}
+                    target='_blank'
+                    rel='noreferrer'
+                >
+                    Discord Invite
+                </a>
             </div>
             <div style={styles.footerText}>
                 &nbsp;|&nbsp;

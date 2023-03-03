@@ -1,4 +1,4 @@
-const Button = ({onClick}) => { 
+const Button = ({onClick, text}) => { 
     const styles = { 
         buttonContainer: {
             border: '1px white solid',
@@ -7,7 +7,7 @@ const Button = ({onClick}) => {
             paddingRight: 20,
             paddingTop: 10,
             paddingBottom: 10,
-            margin: '5%',
+            marginTop: '5%',
             borderRadius: 10,
             fontWeight: 'bold',
             cursor: 'pointer',
@@ -22,7 +22,7 @@ const Button = ({onClick}) => {
             style={styles.buttonContainer}
             onClick={onClick}
         >
-            Connect Wallet
+            {text}
         </div>
     );
 }
