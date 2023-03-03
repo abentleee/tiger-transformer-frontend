@@ -35,7 +35,7 @@ const Footer = () => {
             </div>
             <div style={styles.linkText}>
                 <a 
-                    href={'https://discord.gg/hh4yemqw'} 
+                    href={'https://discord.com/invite/kgg7jytAyp'} 
                     style={{color: '#FFFFFF'}}
                     target='_blank'
                     rel='noreferrer'
