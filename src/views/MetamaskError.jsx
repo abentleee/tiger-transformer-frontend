@@ -30,7 +30,7 @@ const MetamaskError = () => {
             <div style={styles.placeholderText}>
                 MetaMask not found! 
                 <br /><br />
-                Please install in order to use the xDai - Gnosis Transformer 2.0
+                Please install in order to use xDai - Gnosis Transformer 2.0
             </div>
             <div>
                 <Link to={'/'} style={styles.linkStyle}>
