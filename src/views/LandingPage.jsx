@@ -1,6 +1,24 @@
+import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
+import { getProvider } from '../services/Web3Service';
 
 const LandingPage = () => {
+    const navigate = useNavigate();
+    const provider = getProvider();
+
+    const connectToMetamask = async () => { 
+        try {         
+            const accounts = await provider.send("eth_requestAccounts", []);
+            console.log(`accounts: ${JSON.stringify(accounts)}`)
+            navigate('/list-all', {state: { selectedAccount: accounts[0]}, provider })
+        } catch (ex) { 
+            console.error(`exception caught during wallet connection: ${ex.reason}`);
+            if(ex.reason === 'missing provider') { 
+                navigate('/metamask-error')
+            }
+        }
+    }
+
     const styles = {
         container: { 
             flex: 1,
@@ -17,7 +35,7 @@ const LandingPage = () => {
             textAlign: 'left',
             fontWeight: 'bold',
             textShadow: '2px 2px black',
-        },
+        }
     }
 
     return (
@@ -31,7 +49,10 @@ const LandingPage = () => {
             </div>
             <Button 
                 text={'Connect Wallet'}
-                onClick={() => console.log('wallet connection button pressed!')}
+                onClick={() => {
+                    console.log('wallet connection button pressed!');
+                    connectToMetamask();
+                }}
             />
         </div>
     );
