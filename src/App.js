@@ -4,7 +4,8 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import LandingPage from './views/LandingPage';
 import NotFound from './views/NotFound';
-import MetamaskNotInstalled from './views/MetamaskNotInstalled';
+import MetamaskError from './views/MetamaskError';
+import ListAllTigers from './views/ListAllTigers';
 
 const App = () => {
   return (
@@ -14,7 +15,8 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path={'/'} element={<LandingPage />} />
-            <Route path={'/metamask-error'} element={<MetamaskNotInstalled />} />
+            <Route path={'/list-all'} element={<ListAllTigers />} />
+            <Route path={'/metamask-error'} element={<MetamaskError />} />
             <Route path={'*'} element={<NotFound />} />
           </Routes>
         </BrowserRouter> 

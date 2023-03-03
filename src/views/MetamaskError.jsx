@@ -1,7 +1,7 @@
 import Button from '../components/Button';
 import { Link } from 'react-router-dom';
 
-const MetamaskNotInstalled = () => {
+const MetamaskError = () => {
     const styles = {
         container: { 
             flex: 1,
@@ -40,4 +40,4 @@ const MetamaskNotInstalled = () => {
         </div>
     );
 }
-export default MetamaskNotInstalled;
+export default MetamaskError;
