@@ -41,11 +41,11 @@ const LandingPage = () => {
     return (
         <div style={styles.container}>
             <div style={styles.placeholderText}>
-                Placeholder text explaining how to use the transformer tool,
-                including links to contract(s) on Blockscout. 
-                
-                Here's a few more sentences with some nonsense words 
-                to fill out the description a bit more.    
+                Behold, the Portal of Transformation, where magic and technology converge to bring forth a wondrous creation: The Transformer. This incredible device enables your tigers to seamlessly transition between the 2D and 3D metaverses, opening up a whole new world of possibilities.
+                <br/><br/>
+                Through the power of the Transformer, your tigers can enter the portal and emerge in a completely different dimension, able to explore and interact with their surroundings in ways they never thought possible.
+                <br/><br/>
+                So step forth, brave tiger owner, and unleash the power of the Portal of Transformation. Your tigers will thank you for it, and you will be forever changed by the journey that awaits you.  
             </div>
             <Button 
                 text={'Connect Wallet'}
