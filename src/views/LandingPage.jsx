@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import { getProvider } from '../services/Web3Service';
-import Fader from '../components/Fader';
+import { landingPageTexts } from '../utils/LandingPageTextUtils';
 
 const LandingPage = () => {
     const navigate = useNavigate();
@@ -42,13 +42,18 @@ const LandingPage = () => {
     return (
         <div style={styles.container}>
             <div style={styles.placeholderText}>
+                {/*
+                TODO: figure out how to handle this properly later 
                 <Fader 
-                    text={"Behold, the Portal of Transformation, where magic and technology converge to bring forth a wondrous creation: The Transformer."}
-                />
-                <br/>
-                This incredible device enables your tigers to seamlessly transition between the 2D and 3D metaverses, opening up a whole new world of possibilities.
-                <br/><br/>
-                Step forth, brave tiger owner, and unleash the power of the Portal of Transformation!
+                    text={landingPageTexts}
+                /> 
+                */}
+                {landingPageTexts[0]}
+                <br /><br />
+                {landingPageTexts[3]}
+                <br /><br />
+                {landingPageTexts[4]}
+                <br />
             </div>
             <Button 
                 text={'Connect Wallet'}

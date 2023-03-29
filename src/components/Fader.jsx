@@ -4,9 +4,9 @@ const Fader = ({text}) => {
     const [fadeProp, setFadeProp] = useState('fade-in');
 
     useEffect(() => { 
-        setInterval(() => {
+        setInterval(() => { 
             setFadeProp(fadeProp === 'fade-in' ? 'fade-out' : 'fade-in');
-        }, [2000]);
+        }, [3000]);
     }, [fadeProp]);
 
     const styles = {
@@ -15,7 +15,7 @@ const Fader = ({text}) => {
         },
         fadeOut: { 
             opacity: 0,
-            transition: "opacity 1s ease",
+            transition: "opacity 0.5s ease",
         }
     }
 
