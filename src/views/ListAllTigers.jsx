@@ -11,15 +11,34 @@ const ListAllTigers = () => {
     const xDaiTigerAddress = '0x22570d137e36099700A9c80E5DDDd4a0d353f6c2';
     const xDaiTigerContract = getContract(xDaiTigerAddress, xDaiTigerABI, provider);
     const [xDaiTokenIds, setXDaiTokenIds] = useState([])
+    const [xDaiTigerImages, setXDaiTigerImages] = useState([]);
 
     useEffect(() => {
         if (xDaiTokenIds.length === 0 && location.state) { 
             xDaiTigerContract.walletOfOwner(location.state.selectedAccount).then((resp) => {
-                const tokenIds = resp.map(i => parseInt(i));
-                setXDaiTokenIds(tokenIds);
+                const xDaiTokenIds = resp.map(i => parseInt(i));
+                setXDaiTokenIds(xDaiTokenIds);
             });
         }
     }, []);
+
+    useEffect(() => {
+        if(xDaiTigerImages.length === 0) {
+            xDaiTokenIds.forEach(tokenId => { 
+                console.log(`getting metadata for token: ${tokenId}`);
+                xDaiTigerContract.tokenURI(tokenId).then((resp) => { 
+                    const ipfsHash = resp.replace('ipfs://', '')
+                    fetch(`https://ipfs.io/ipfs/${ipfsHash}`)
+                        .then((resp) => resp.json())
+                        .then((resp) => { 
+                            const imageUrl = `https://ipfs.io/ipfs/${resp.image.replace('ipfs://', '')}`;
+                            console.log(`imageUrl: ${imageUrl}`);
+                            setXDaiTigerImages((xDaiTigerImages) => ([...xDaiTigerImages, imageUrl]))
+                        });
+                });
+            });
+        }
+    }, [xDaiTokenIds]);
 
     const printTokenIds = (tokenIds) => { 
         var result = '';
@@ -30,16 +49,28 @@ const ListAllTigers = () => {
     }
 
     const styles = {
-        container: { 
+        connectedWalletContainer: { 
+            flex: 0.1,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginLeft: '15%',
+            marginRight: '15%',
+        },
+        listTigersContainer: { 
             flex: 1,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: '5%',
-            marginBottom: '5%',
             marginLeft: '15%',
             marginRight: '15%',
+            border: '1px red solid',
+        },
+        tigerImagesContainer: {
+            display: 'flex',
+            flexDirection: 'row',
         },
         headerText: { 
             textAlign: 'left',
@@ -51,21 +82,43 @@ const ListAllTigers = () => {
             fontWeight: 'bold',
             fontSize: '75%',
             textShadow: '2px 2px black',
+        },
+        tigerImage: { 
+            width: 150,
+            height: 150,
+            marginRight: '5%',
+            border: '5px white solid'
         }
     }
 
     if (location.state) { // only render if hitting route thru app flow
         return (
-            <div style={styles.container}>
-                <div style={styles.selectedAccountText}>
-                    Wallet: {shortenContractAddress(location.state.selectedAccount)}
-                    <br />
-                    xDai Token IDs: {printTokenIds(xDaiTokenIds)}
+            <>
+                <div style={styles.connectedWalletContainer}>
+                    <div style={styles.selectedAccountText}>
+                        Wallet: {shortenContractAddress(location.state.selectedAccount)}
+                    </div>
                 </div>
-                <div style={styles.headerText}>
-                    List All Tigers View (TODO)
+                <div style={styles.listTigersContainer}>
+                    <div style={styles.selectedAccountText}>
+                        xDai Token IDs: {printTokenIds(xDaiTokenIds)}
+                    </div>
+                    <div style={styles.tigerImagesContainer}>
+                        {
+                            xDaiTigerImages.map((imageUrl, index) => { 
+                                return (
+                                    <img 
+                                        src={imageUrl}
+                                        key={index}
+                                        style={styles.tigerImage}
+                                    />
+
+                                );
+                            })
+                        }
+                    </div>
                 </div>
-            </div>
+            </>
         );
     }
 
