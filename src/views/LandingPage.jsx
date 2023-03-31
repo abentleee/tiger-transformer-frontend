@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import { getProvider } from '../services/Web3Service';
+import { landingPageTexts } from '../utils/LandingPageTextUtils';
 
 const LandingPage = () => {
     const navigate = useNavigate();
@@ -41,11 +42,18 @@ const LandingPage = () => {
     return (
         <div style={styles.container}>
             <div style={styles.placeholderText}>
-                Placeholder text explaining how to use the transformer tool,
-                including links to contract(s) on Blockscout. 
-                
-                Here's a few more sentences with some nonsense words 
-                to fill out the description a bit more.    
+                {/*
+                TODO: figure out how to handle this properly later 
+                <Fader 
+                    text={landingPageTexts}
+                /> 
+                */}
+                {landingPageTexts[0]}
+                <br /><br />
+                {landingPageTexts[3]}
+                <br /><br />
+                {landingPageTexts[4]}
+                <br />
             </div>
             <Button 
                 text={'Connect Wallet'}
