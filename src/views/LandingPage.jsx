@@ -11,6 +11,10 @@ const LandingPage = () => {
             const provider = getProvider();
             const accounts = await provider.send("eth_requestAccounts", []);
             console.log(`accounts: ${JSON.stringify(accounts)}`)
+
+            const network = await provider.getNetwork();
+            console.log(`network: ${JSON.stringify(network)}`);
+
             navigate('/list-all', {state: { selectedAccount: accounts[0]}, provider })
         } catch (ex) { 
             console.error(`exception caught during wallet connection: ${ex.reason}`);

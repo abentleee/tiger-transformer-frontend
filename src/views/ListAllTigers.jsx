@@ -33,7 +33,7 @@ const ListAllTigers = () => {
                         .then((resp) => resp.json())
                         .then((resp) => { 
                             const imageUrl = `https://ipfs.io/ipfs/${resp.image.replace('ipfs://', '')}`;
-                            setXDaiTigerImages((xDaiTigerImages) => ([...xDaiTigerImages, imageUrl]))
+                            setXDaiTigerImages((xDaiTigerImages) => ([...xDaiTigerImages, imageUrl]));
                         });
                 });
             });
