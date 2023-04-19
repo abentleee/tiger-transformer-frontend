@@ -15,7 +15,11 @@ const LandingPage = () => {
             const network = await provider.getNetwork();
             console.log(`network: ${JSON.stringify(network)}`);
 
-            navigate('/list-all', {state: { selectedAccount: accounts[0]}, provider })
+            if(network.name === 'xdai') {
+                navigate('/list-all', {state: { selectedAccount: accounts[0]}, provider })
+            } else { 
+                navigate('/wrong-blockchain-error', {state: {networkName: network.name}});
+            }
         } catch (ex) { 
             console.error(`exception caught during wallet connection: ${ex.reason}`);
             if(ex.reason === 'missing provider') { 
