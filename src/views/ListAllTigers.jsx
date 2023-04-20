@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation, Navigate } from 'react-router-dom';
+import { useLocation, useNavigate, Navigate } from 'react-router-dom';
 import { getContract, getProvider } from '../services/Web3Service';
 import { shortenContractAddress } from '../utils/StringUtil';
 import Button from '../components/Button';
@@ -8,6 +8,7 @@ import xDaiTigerABI from '../assets/xDaiContractAbi.json'
 
 const ListAllTigers = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const provider = getProvider();
     
     const xDaiTigerAddress = '0x22570d137e36099700A9c80E5DDDd4a0d353f6c2';
@@ -18,16 +19,29 @@ const ListAllTigers = () => {
     
     const [selectedTiger, setSelectedTiger] = useState(0); 
 
+    const retrieveXDaiTigers = () => { 
+        xDaiTigerContract.walletOfOwner(location.state.selectedAccount)
+            .then((resp) => {
+                const xDaiTokenIds = resp.map(i => parseInt(i));
+                setXDaiTokenIds(xDaiTokenIds);
+                // setXDaiTokenIds([5555,5554,5553,5552,5551,5550,5549, 5544, 3345,1234]);
+            })
+            .catch((err) => {
+                console.error(`error calling walletOfOwner: ${JSON.stringify(err)}`);
+            });
+    };
+
+    const resetState = () => { 
+        setXDaiTokenIds([]);
+        setXDaiTigerImages([]);
+        setSelectedTiger(0);
+    }
+
     useEffect(() => {
         if (xDaiTokenIds.length === 0 && location.state) { 
-            xDaiTigerContract.walletOfOwner(location.state.selectedAccount)
-                .then((resp) => {
-                    const xDaiTokenIds = resp.map(i => parseInt(i));
-                    // setXDaiTokenIds(xDaiTokenIds);
-                    setXDaiTokenIds([5555,5554,5553,5552,5551,5550,5549]);
-                })
-                .catch((err) => console.error(`error calling walletOfOwner: ${JSON.stringify(err)}`));
+            retrieveXDaiTigers();
         }
+    // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
@@ -39,12 +53,12 @@ const ListAllTigers = () => {
                         .then((resp) => resp.json())
                         .then((resp) => { 
                             const imageUrl = `https://ipfs.io/ipfs/${resp.image.replace('ipfs://', '')}`;
-                            console.log(`imageUrl for ${tokenId}: ${imageUrl}`);
                             setXDaiTigerImages((xDaiTigerImages) => ([...xDaiTigerImages, imageUrl]));
                         });
                 });
             });
         }
+    // eslint-disable-next-line
     }, [xDaiTokenIds]);
 
     const styles = {
@@ -105,6 +119,14 @@ const ListAllTigers = () => {
             fontSize: '75%',
             textShadow: '2px 2px black',
         },
+        clickableLink: {
+            textDecoration: 'underline', 
+            cursor: 'pointer'
+        },
+        buttonRowContainer: {
+            display: 'flex', 
+            flexDirection: 'row',
+        }
     }
 
     if (location.state) { // only render if hitting route thru app flow
@@ -125,20 +147,12 @@ const ListAllTigers = () => {
                     )}
                 </div>
                 <div style={styles.contentContainer}>
+                    {(xDaiTigerImages.length === 0) && (
+                        <div style={styles.bodyText}>
+                            Loading Tigers...    
+                        </div>
+                    )}
                     <div style={styles.allTigersContainer}>
-                        {xDaiTigerImages.length === 0 && (
-                            <div style={styles.bodyText}>
-                                Loading Tigers...    
-                            </div>
-                        )}
-                        {/* <div 
-                            style={styles.scrollButtonContainer}
-                            onClick={() => console.log('left arrow click')}>
-                            <img 
-                                src={leftArrow}
-                                style={styles.scrollButton}
-                            />
-                        </div> */}
                         {xDaiTigerImages.map((imageUrl, index) => { 
                                 return (
                                     <>
@@ -159,26 +173,61 @@ const ListAllTigers = () => {
                                 );
                             })
                         }
-                        {/* <div 
-                            style={styles.scrollButtonContainer} 
-                            onClick={() => console.log('right arrow click')}>
-                            <img 
-                                src={rightArrow}
-                                style={styles.scrollButton}
-                            />
-                        </div> */}
                     </div>
-                    {selectedTiger !== 0 && (
-                        <div style={styles.selectedTigerContainer}>
-                            <div style={styles.bodyText}>
-                                {selectedTiger}
-                            </div>
-                            <Button 
-                                text={'TRANSFORM'}
-                                onClick={() => console.log('transform button pressed')}
-                            />
+                    <div style={styles.selectedTigerContainer}>
+                        {selectedTiger !== 0 && (
+                            <>
+                                <div style={styles.bodyText}>
+                                    {selectedTiger}
+                                </div>
+                                <div style={styles.buttonRowContainer}>
+                                <Button 
+                                    text={'TRANSFORM'}
+                                    onClick={() => console.log('transform button pressed')}
+                                />
+                                <Button 
+                                    text={'HOME'}
+                                    onClick={() => {
+                                        resetState();
+                                        navigate('/');
+                                    }}
+                                />
+                                </div>
+                            </>
+                        )}
+                        {selectedTiger === 0 && (
+                            <>
+                                <div style={styles.buttonRowContainer}>
+                                <Button 
+                                    text={'TRANSFORM'}
+                                    onClick={() => console.log('transform button pressed')}
+                                    disabled={true}
+                                />
+                                <Button 
+                                    text={'HOME'}
+                                    onClick={() => {
+                                        resetState();
+                                        navigate('/');
+                                    }}
+                                />
+                                </div>
+                            </>
+                        )}
+                        <br />
+                        <div style={styles.bodyText}>
+                            Not seeing expected tigers?
+                            <br/>
+                            <div 
+                                style={styles.clickableLink}
+                                onClick={() => {
+                                    resetState();
+                                    retrieveXDaiTigers();
+                                }}
+                            >
+                                Reload</div>
+                            <br/>
                         </div>
-                    )}
+                    </div>
                 </div>
             </>
         );
