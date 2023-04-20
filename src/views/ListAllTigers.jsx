@@ -24,7 +24,6 @@ const ListAllTigers = () => {
             .then((resp) => {
                 const xDaiTokenIds = resp.map(i => parseInt(i));
                 setXDaiTokenIds(xDaiTokenIds);
-                // setXDaiTokenIds([5555,5554,5553,5552,5551,5550,5549, 5544, 3345,1234]);
             })
             .catch((err) => {
                 console.error(`error calling walletOfOwner: ${JSON.stringify(err)}`);
