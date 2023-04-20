@@ -6,6 +6,7 @@ import LandingPage from './views/LandingPage';
 import NotFound from './views/NotFound';
 import MetamaskError from './views/MetamaskError';
 import ListAllTigers from './views/ListAllTigers';
+import WrongBlockchainError from './views/WrongBlockchainError';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
             <Route path={'/'} element={<LandingPage />} />
             <Route path={'/list-all'} element={<ListAllTigers />} />
             <Route path={'/metamask-error'} element={<MetamaskError />} />
+            <Route path={'/wrong-blockchain-error'} element={<WrongBlockchainError />} />
             <Route path={'*'} element={<NotFound />} />
           </Routes>
         </BrowserRouter> 

@@ -11,7 +11,15 @@ const LandingPage = () => {
             const provider = getProvider();
             const accounts = await provider.send("eth_requestAccounts", []);
             console.log(`accounts: ${JSON.stringify(accounts)}`)
-            navigate('/list-all', {state: { selectedAccount: accounts[0]}, provider })
+
+            const network = await provider.getNetwork();
+            console.log(`network: ${JSON.stringify(network)}`);
+
+            if(network.name === 'xdai') {
+                navigate('/list-all', {state: { selectedAccount: accounts[0]}, provider })
+            } else { 
+                navigate('/wrong-blockchain-error', {state: {networkName: network.name}});
+            }
         } catch (ex) { 
             console.error(`exception caught during wallet connection: ${ex.reason}`);
             if(ex.reason === 'missing provider') { 
