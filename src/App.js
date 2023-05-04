@@ -7,6 +7,7 @@ import NotFound from './views/NotFound';
 import MetamaskError from './views/MetamaskError';
 import ListAllTigers from './views/ListAllTigers';
 import WrongBlockchainError from './views/WrongBlockchainError';
+import ConfirmTigerTransformation from './views/ConfirmTigerTransform';
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
             <Route path={'/list-all'} element={<ListAllTigers />} />
             <Route path={'/metamask-error'} element={<MetamaskError />} />
             <Route path={'/wrong-blockchain-error'} element={<WrongBlockchainError />} />
+            <Route path={'/confirm-tiger-transform'} element={<ConfirmTigerTransformation />} />
             <Route path={'*'} element={<NotFound />} />
           </Routes>
         </BrowserRouter> 

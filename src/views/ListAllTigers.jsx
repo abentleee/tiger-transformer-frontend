@@ -21,7 +21,7 @@ const ListAllTigers = () => {
     const gnosisTigerContract = getContract(gnosisTigerAddress, gnosisTigerABI, provider);
     const [gnosisTigers, setGnosisTigers] = useState([]);
     
-    const [selectedTiger, setSelectedTiger] = useState(0); 
+    const [selectedTiger, setSelectedTiger] = useState({}); 
 
     const retrieveTigers = async () => { 
         //confirm state reset each time we load tigers
@@ -70,7 +70,7 @@ const ListAllTigers = () => {
         setXDaiTigers([]);
         setGnosisTigers([]);
         
-        setSelectedTiger(0);
+        setSelectedTiger({});
     }
 
     useEffect(() => {
@@ -182,12 +182,12 @@ const ListAllTigers = () => {
                                             src={xDaiTiger.imageUrl}
                                             key={xDaiTiger.id}
                                             alt={xDaiTiger.id}
-                                            style={(selectedTiger === xDaiTiger.id) ? styles.selectedTigerImage : styles.tigerImage}
+                                            style={(selectedTiger.id === xDaiTiger.id) ? styles.selectedTigerImage : styles.tigerImage}
                                             onClick={() => {
-                                                if(selectedTiger === xDaiTiger.id){
-                                                    setSelectedTiger(0);
+                                                if(selectedTiger.id === xDaiTiger.id){
+                                                    setSelectedTiger({});
                                                 } else { 
-                                                    setSelectedTiger(xDaiTiger.id);
+                                                    setSelectedTiger(xDaiTiger);
                                                 }
                                             }}
                                         />
@@ -202,12 +202,12 @@ const ListAllTigers = () => {
                                             src={gnosisTiger.imageUrl}
                                             key={gnosisTiger.id}
                                             alt={gnosisTiger.id}
-                                            style={(selectedTiger === gnosisTiger.id) ? styles.selectedTigerImage : styles.tigerImage}
+                                            style={(selectedTiger.id === gnosisTiger.id) ? styles.selectedTigerImage : styles.tigerImage}
                                             onClick={() => {
-                                                if(selectedTiger === gnosisTiger.id){
-                                                    setSelectedTiger(0);
+                                                if(selectedTiger.id === gnosisTiger.id){
+                                                    setSelectedTiger({});
                                                 } else { 
-                                                    setSelectedTiger(gnosisTiger.id);
+                                                    setSelectedTiger(gnosisTiger);
                                                 }
                                             }}
                                         />
@@ -217,32 +217,31 @@ const ListAllTigers = () => {
                         }
                     </div>
                     <div style={styles.selectedTigerContainer}>
-                        {selectedTiger !== 0 && (
+                        {selectedTiger && (
                             <>
                                 <div style={styles.bodyText}>
-                                    {selectedTiger}
+                                    {selectedTiger.id}
                                 </div>
                                 <div style={styles.buttonRowContainer}>
-                                <Button 
-                                    text={'TRANSFORM'}
-                                    onClick={() => console.log('transform button pressed')}
-                                />
-                                <Button 
-                                    text={'HOME'}
-                                    onClick={() => {
-                                        resetState();
-                                        navigate('/');
-                                    }}
-                                />
+                                    <Button 
+                                        text={'TRANSFORM'}
+                                        onClick={() => navigate('/confirm-tiger-transform', {state: {selectedTiger}})}
+                                    />
+                                    <Button 
+                                        text={'HOME'}
+                                        onClick={() => {
+                                            resetState();
+                                            navigate('/');
+                                        }}
+                                    />
                                 </div>
                             </>
                         )}
-                        {selectedTiger === 0 && (
+                        {!selectedTiger && (
                             <>
                                 <div style={styles.buttonRowContainer}>
                                 <Button 
                                     text={'TRANSFORM'}
-                                    onClick={() => console.log('transform button pressed')}
                                     disabled={true}
                                 />
                                 <Button 
