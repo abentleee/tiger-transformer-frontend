@@ -3,8 +3,10 @@ import { useLocation, useNavigate, Navigate } from 'react-router-dom';
 import { getContract, getProvider } from '../services/Web3Service';
 import { shortenContractAddress } from '../utils/StringUtil';
 import Button from '../components/Button';
+import { Tiger } from '../models/Tiger';
 
-import xDaiTigerABI from '../assets/xDaiContractAbi.json'
+import xDaiTigerABI from '../assets/xDaiContractAbi.json';
+import gnosisTigerABI from '../assets/gnosisContractAbi.json';
 
 const ListAllTigers = () => {
     const location = useLocation();
@@ -13,52 +15,73 @@ const ListAllTigers = () => {
     
     const xDaiTigerAddress = '0x22570d137e36099700A9c80E5DDDd4a0d353f6c2';
     const xDaiTigerContract = getContract(xDaiTigerAddress, xDaiTigerABI, provider);
-    
-    const [xDaiTokenIds, setXDaiTokenIds] = useState([])
-    const [xDaiTigerImages, setXDaiTigerImages] = useState([]);
+    const [xDaiTigers, setXDaiTigers] = useState([]);
+
+    const gnosisTigerAddress = '0x789Ad63C76940E6D48c6A795f572528752451290';
+    const gnosisTigerContract = getContract(gnosisTigerAddress, gnosisTigerABI, provider);
+    const [gnosisTigers, setGnosisTigers] = useState([]);
     
     const [selectedTiger, setSelectedTiger] = useState(0); 
 
-    const retrieveXDaiTigers = () => { 
+    const retrieveTigers = async () => { 
+        //confirm state reset each time we load tigers
+        await resetState();
+
         xDaiTigerContract.walletOfOwner(location.state.selectedAccount)
             .then((resp) => {
                 const xDaiTokenIds = resp.map(i => parseInt(i));
-                setXDaiTokenIds(xDaiTokenIds);
+                xDaiTokenIds.forEach(tokenId => { 
+                    xDaiTigerContract.tokenURI(tokenId).then((resp) => { 
+                        const ipfsHash = resp.replace('ipfs://', '')
+                        fetch(`https://ipfs.io/ipfs/${ipfsHash}`)
+                            .then((resp) => resp.json())
+                            .then((resp) => { 
+                                const imageUrl = `https://ipfs.io/ipfs/${resp.image.replace('ipfs://', '')}`;
+                                const xDaiTiger = new Tiger(tokenId, imageUrl);
+                                setXDaiTigers((xDaiTigers) => ([...xDaiTigers, xDaiTiger]));
+                            });
+                    });
+                });
+            })
+            .then(() => {
+                gnosisTigerContract.walletOfOwner(location.state.selectedAccount)
+                    .then((resp) => {
+                        const gnosisTokenIds = resp.map(i => parseInt(i));
+                        gnosisTokenIds.forEach((tokenId => { 
+                            gnosisTigerContract.tokenURI(tokenId).then((resp) => { 
+                            const ipfsHash = resp.replace('ipfs://', '')
+                            fetch(`https://ipfs.io/ipfs/${ipfsHash}`)
+                                .then((resp) => resp.json())
+                                .then((resp) => { 
+                                    const imageUrl = `https://ipfs.io/ipfs/${resp.image.replace('ipfs://', '')}`;
+                                    const gnosisTiger = new Tiger(tokenId, imageUrl);
+                                    setGnosisTigers((gnosisTigers) => ([...gnosisTigers, gnosisTiger]));
+                                });
+                            });
+                        }));
+                    });
             })
             .catch((err) => {
                 console.error(`error calling walletOfOwner: ${JSON.stringify(err)}`);
             });
     };
 
-    const resetState = () => { 
-        setXDaiTokenIds([]);
-        setXDaiTigerImages([]);
+    const resetState = async () => { 
+        setXDaiTigers([]);
+        setGnosisTigers([]);
+        
         setSelectedTiger(0);
     }
 
     useEffect(() => {
-        if (xDaiTokenIds.length === 0 && location.state) { 
-            retrieveXDaiTigers();
+        const fetchAllTigers = async () => { 
+            if ((xDaiTigers.length === 0 && gnosisTigers.length === 0) && location.state) { 
+                await retrieveTigers();
+            }   
         }
+        fetchAllTigers();
     // eslint-disable-next-line
     }, []);
-
-    useEffect(() => {
-        if(xDaiTigerImages.length === 0) {
-            xDaiTokenIds.forEach(tokenId => { 
-                xDaiTigerContract.tokenURI(tokenId).then((resp) => { 
-                    const ipfsHash = resp.replace('ipfs://', '')
-                    fetch(`https://ipfs.io/ipfs/${ipfsHash}`)
-                        .then((resp) => resp.json())
-                        .then((resp) => { 
-                            const imageUrl = `https://ipfs.io/ipfs/${resp.image.replace('ipfs://', '')}`;
-                            setXDaiTigerImages((xDaiTigerImages) => ([...xDaiTigerImages, imageUrl]));
-                        });
-                });
-            });
-        }
-    // eslint-disable-next-line
-    }, [xDaiTokenIds]);
 
     const styles = {
         connectedWalletContainer: { 
@@ -132,12 +155,12 @@ const ListAllTigers = () => {
         return (
             <>
                 <div style={styles.connectedWalletContainer}>
-                    {xDaiTigerImages.length === 0 && (
+                    {(xDaiTigers.length === 0 && gnosisTigers.length === 0) && (
                         <div style={styles.bodyText}>
                             Wallet: {shortenContractAddress(location.state.selectedAccount)}
                         </div>
                     )}
-                    {xDaiTigerImages.length > 0 && (
+                    {(xDaiTigers.length > 0 || gnosisTigers.length > 0) && (
                         <div style={styles.bodyText}>
                             Wallet: {shortenContractAddress(location.state.selectedAccount)}
                             <br /><br />
@@ -146,25 +169,45 @@ const ListAllTigers = () => {
                     )}
                 </div>
                 <div style={styles.contentContainer}>
-                    {(xDaiTigerImages.length === 0) && (
+                    {(xDaiTigers.length === 0 && gnosisTigers.length === 0) && (
                         <div style={styles.bodyText}>
                             Loading Tigers...    
                         </div>
                     )}
                     <div style={styles.allTigersContainer}>
-                        {xDaiTigerImages.map((imageUrl, index) => { 
+                        {xDaiTigers.map((xDaiTiger) => { 
                                 return (
                                     <>
                                         <img 
-                                            src={imageUrl}
-                                            key={xDaiTokenIds[index]}
-                                            alt={xDaiTokenIds[index]}
-                                            style={(selectedTiger === xDaiTokenIds[index]) ? styles.selectedTigerImage : styles.tigerImage}
+                                            src={xDaiTiger.imageUrl}
+                                            key={xDaiTiger.id}
+                                            alt={xDaiTiger.id}
+                                            style={(selectedTiger === xDaiTiger.id) ? styles.selectedTigerImage : styles.tigerImage}
                                             onClick={() => {
-                                                if(selectedTiger === xDaiTokenIds[index]){
+                                                if(selectedTiger === xDaiTiger.id){
                                                     setSelectedTiger(0);
                                                 } else { 
-                                                    setSelectedTiger(xDaiTokenIds[index]);
+                                                    setSelectedTiger(xDaiTiger.id);
+                                                }
+                                            }}
+                                        />
+                                    </>
+                                );
+                            })
+                        }
+                        {gnosisTigers.map((gnosisTiger) => { 
+                                return (
+                                    <>
+                                        <img 
+                                            src={gnosisTiger.imageUrl}
+                                            key={gnosisTiger.id}
+                                            alt={gnosisTiger.id}
+                                            style={(selectedTiger === gnosisTiger.id) ? styles.selectedTigerImage : styles.tigerImage}
+                                            onClick={() => {
+                                                if(selectedTiger === gnosisTiger.id){
+                                                    setSelectedTiger(0);
+                                                } else { 
+                                                    setSelectedTiger(gnosisTiger.id);
                                                 }
                                             }}
                                         />
@@ -220,7 +263,7 @@ const ListAllTigers = () => {
                                 style={styles.clickableLink}
                                 onClick={() => {
                                     resetState();
-                                    retrieveXDaiTigers();
+                                    retrieveTigers();
                                 }}
                             >
                                 Reload</div>
