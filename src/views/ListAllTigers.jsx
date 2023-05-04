@@ -85,10 +85,10 @@ const ListAllTigers = () => {
 
     const styles = {
         connectedWalletContainer: { 
-            flex: 0.1,
+            flex: 1,
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center',
+            justifyContent: 'end',
             alignItems: 'center',
             marginLeft: '15%',
             marginRight: '15%',
@@ -99,7 +99,6 @@ const ListAllTigers = () => {
             flexDirection: 'column',
             justifyContent: 'start',
             alignItems: 'center',
-            // border: '1px blue solid',
         },
         allTigersContainer: {
             display: 'flex',
@@ -158,6 +157,7 @@ const ListAllTigers = () => {
                     {(xDaiTigers.length === 0 && gnosisTigers.length === 0) && (
                         <div style={styles.bodyText}>
                             Wallet: {shortenContractAddress(location.state.selectedAccount)}
+                            <br />
                         </div>
                     )}
                     {(xDaiTigers.length > 0 || gnosisTigers.length > 0) && (
@@ -225,7 +225,10 @@ const ListAllTigers = () => {
                                 <div style={styles.buttonRowContainer}>
                                     <Button 
                                         text={'TRANSFORM'}
-                                        onClick={() => navigate('/confirm-tiger-transform', {state: {selectedTiger}})}
+                                        onClick={() => {
+                                            console.log(`selectedAccount: ${location.state.selectedAccount}`);
+                                            navigate('/confirm-tiger-transform', {state: {selectedTiger, selectedAccount: location.state.selectedAccount}})
+                                        }}
                                     />
                                     <Button 
                                         text={'HOME'}
