@@ -22,6 +22,7 @@ const ListAllTigers = () => {
     const [gnosisTigers, setGnosisTigers] = useState([]);
     
     const [selectedTiger, setSelectedTiger] = useState({}); 
+    const [isLookupCallComplete, setIsLookupCallComplete] = useState(false);
 
     const retrieveTigers = async () => { 
         //confirm state reset each time we load tigers
@@ -37,7 +38,7 @@ const ListAllTigers = () => {
                             .then((resp) => resp.json())
                             .then((resp) => { 
                                 const imageUrl = `https://ipfs.io/ipfs/${resp.image.replace('ipfs://', '')}`;
-                                const xDaiTiger = new Tiger(tokenId, imageUrl);
+                                const xDaiTiger = new Tiger(tokenId, imageUrl, true);
                                 setXDaiTigers((xDaiTigers) => ([...xDaiTigers, xDaiTiger]));
                             });
                     });
@@ -54,11 +55,12 @@ const ListAllTigers = () => {
                                 .then((resp) => resp.json())
                                 .then((resp) => { 
                                     const imageUrl = `https://ipfs.io/ipfs/${resp.image.replace('ipfs://', '')}`;
-                                    const gnosisTiger = new Tiger(tokenId, imageUrl);
+                                    const gnosisTiger = new Tiger(tokenId, imageUrl, false);
                                     setGnosisTigers((gnosisTigers) => ([...gnosisTigers, gnosisTiger]));
                                 });
                             });
                         }));
+                        setIsLookupCallComplete(true);
                     });
             })
             .catch((err) => {
@@ -69,8 +71,8 @@ const ListAllTigers = () => {
     const resetState = async () => { 
         setXDaiTigers([]);
         setGnosisTigers([]);
-        
         setSelectedTiger({});
+        setIsLookupCallComplete(false);
     }
 
     useEffect(() => {
@@ -169,9 +171,14 @@ const ListAllTigers = () => {
                     )}
                 </div>
                 <div style={styles.contentContainer}>
-                    {(xDaiTigers.length === 0 && gnosisTigers.length === 0) && (
+                    {(xDaiTigers.length === 0 && gnosisTigers.length === 0 && !isLookupCallComplete) && (
                         <div style={styles.bodyText}>
                             Loading Tigers...    
+                        </div>
+                    )}
+                    {(xDaiTigers.length === 0 && gnosisTigers.length === 0 && isLookupCallComplete) && (
+                        <div style={styles.bodyText}>
+                            No tigers found connected to wallet!
                         </div>
                     )}
                     <div style={styles.allTigersContainer}>
@@ -217,7 +224,7 @@ const ListAllTigers = () => {
                         }
                     </div>
                     <div style={styles.selectedTigerContainer}>
-                        {selectedTiger && (
+                        {selectedTiger.id && (
                             <>
                                 <div style={styles.bodyText}>
                                     {selectedTiger.id}
@@ -227,7 +234,13 @@ const ListAllTigers = () => {
                                         text={'TRANSFORM'}
                                         onClick={() => {
                                             console.log(`selectedAccount: ${location.state.selectedAccount}`);
-                                            navigate('/confirm-tiger-transform', {state: {selectedTiger, selectedAccount: location.state.selectedAccount}})
+                                            const state = {
+                                                state: {
+                                                    selectedTiger, 
+                                                    selectedAccount: location.state.selectedAccount,
+                                                }
+                                            };
+                                            navigate('/confirm-tiger-transform', state)
                                         }}
                                     />
                                     <Button 
@@ -240,7 +253,7 @@ const ListAllTigers = () => {
                                 </div>
                             </>
                         )}
-                        {!selectedTiger && (
+                        {!selectedTiger.id && (
                             <>
                                 <div style={styles.buttonRowContainer}>
                                 <Button 
