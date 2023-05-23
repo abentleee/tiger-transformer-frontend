@@ -30,7 +30,8 @@ const ListAllTigers = () => {
 
         xDaiTigerContract.walletOfOwner(location.state.selectedAccount)
             .then((resp) => {
-                const xDaiTokenIds = resp.map(i => parseInt(i));
+                // const xDaiTokenIds = resp.map(i => parseInt(i));
+                const xDaiTokenIds = [1111,1112,1113,1114,1115,1116,1117,1118,1119,1200,1201,1202,1203,1204,1205,1300];
                 xDaiTokenIds.forEach(tokenId => { 
                     xDaiTigerContract.tokenURI(tokenId).then((resp) => { 
                         const ipfsHash = resp.replace('ipfs://', '')
@@ -106,10 +107,11 @@ const ListAllTigers = () => {
             display: 'flex',
             flexDirection: 'row',
             overflowX: 'scroll',
+            width: '90%',
             border: '5px white solid',
-            paddingLeft: '5%',
-            paddingRight: '5%',
-
+            marginLeft: '25%',
+            marginRight: '25%',
+            justifyContent: 'center',
         },
         tigerImage: { 
             width: 150,
