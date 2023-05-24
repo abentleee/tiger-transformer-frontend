@@ -52,6 +52,7 @@ const Footer = () => {
                     display: 'flex',
                     justifyContent: 'center',
                     fontWeight: 'bold',
+                    paddingTop: '20%',
                 }}>
                     <div style={{
                         display: 'flex',
