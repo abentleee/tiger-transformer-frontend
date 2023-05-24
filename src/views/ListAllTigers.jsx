@@ -30,8 +30,7 @@ const ListAllTigers = () => {
 
         xDaiTigerContract.walletOfOwner(location.state.selectedAccount)
             .then((resp) => {
-                // const xDaiTokenIds = resp.map(i => parseInt(i));
-                const xDaiTokenIds = [1111,1112,1113,1114,1115,1116,1117,1118,1119,1200,1201,1202,1203,1204,1205,1300];
+                const xDaiTokenIds = resp.map(i => parseInt(i));
                 xDaiTokenIds.forEach(tokenId => { 
                     xDaiTigerContract.tokenURI(tokenId).then((resp) => { 
                         const ipfsHash = resp.replace('ipfs://', '')
@@ -106,7 +105,8 @@ const ListAllTigers = () => {
         allTigersContainer: {
             display: 'flex',
             flexDirection: 'row',
-            overflowX: 'scroll',
+            flexWrap: 'wrap',
+            // overflowX: 'scroll',
             width: '90%',
             border: '5px white solid',
             marginLeft: '25%',
@@ -116,7 +116,7 @@ const ListAllTigers = () => {
         tigerImage: { 
             width: 150,
             height: 150,
-            margin: '2%',
+            margin: '1%',
             border: '2px white solid',
             cursor: 'pointer',
         },
@@ -129,7 +129,7 @@ const ListAllTigers = () => {
         selectedTigerImage: { 
             width: 150,
             height: 150,
-            margin: '2%',
+            margin: '1%',
             border: '2px red solid',
             cursor: 'pointer',
         },
@@ -224,6 +224,50 @@ const ListAllTigers = () => {
                                 );
                             })
                         }
+                        {/* <ScrollMenu
+                            LeftArrow={<Button text={'Left'}/>}
+                        >
+                            {xDaiTigers.map((xDaiTiger) => { 
+                                    return (
+                                        <>
+                                            <img 
+                                                src={xDaiTiger.imageUrl}
+                                                key={xDaiTiger.id}
+                                                alt={xDaiTiger.id}
+                                                style={(selectedTiger.id === xDaiTiger.id) ? styles.selectedTigerImage : styles.tigerImage}
+                                                onClick={() => {
+                                                    if(selectedTiger.id === xDaiTiger.id){
+                                                        setSelectedTiger({});
+                                                    } else { 
+                                                        setSelectedTiger(xDaiTiger);
+                                                    }
+                                                }}
+                                            />
+                                        </>
+                                    );
+                                })
+                            }
+                            {gnosisTigers.map((gnosisTiger) => { 
+                                return (
+                                        <>
+                                            <img 
+                                                src={gnosisTiger.imageUrl}
+                                                key={gnosisTiger.id}
+                                                alt={gnosisTiger.id}
+                                                style={(selectedTiger.id === gnosisTiger.id) ? styles.selectedTigerImage : styles.tigerImage}
+                                                onClick={() => {
+                                                    if(selectedTiger.id === gnosisTiger.id){
+                                                        setSelectedTiger({});
+                                                    } else { 
+                                                        setSelectedTiger(gnosisTiger);
+                                                    }
+                                                }}
+                                            />
+                                        </>
+                                    );
+                                })
+                            }
+                        </ScrollMenu> */}
                     </div>
                     <div style={styles.selectedTigerContainer}>
                         {selectedTiger.id && (
