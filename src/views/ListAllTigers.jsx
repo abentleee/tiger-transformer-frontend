@@ -105,16 +105,23 @@ const ListAllTigers = () => {
         allTigersContainer: {
             display: 'flex',
             flexDirection: 'row',
-            overflowX: 'scroll',
-            border: '5px white solid',
-            paddingLeft: '5%',
-            paddingRight: '5%',
 
+            // TODO: figure out how to handle
+            // overflowX without extra images
+            // getting cut off
+            flexWrap: 'wrap',
+            // overflowX: 'scroll', 
+            
+            width: '90%',
+            border: '5px white solid',
+            marginLeft: '25%',
+            marginRight: '25%',
+            justifyContent: 'center',
         },
         tigerImage: { 
             width: 150,
             height: 150,
-            margin: '2%',
+            margin: '1%',
             border: '2px white solid',
             cursor: 'pointer',
         },
@@ -127,7 +134,7 @@ const ListAllTigers = () => {
         selectedTigerImage: { 
             width: 150,
             height: 150,
-            margin: '2%',
+            margin: '1%',
             border: '2px red solid',
             cursor: 'pointer',
         },
