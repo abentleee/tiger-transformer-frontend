@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import { getProvider } from '../services/Web3Service';
 import { landingPageTexts } from '../utils/LandingPageTextUtils';
+import packageJson from '../../package.json'
 
 const LandingPage = () => {
     const navigate = useNavigate();
@@ -44,6 +45,13 @@ const LandingPage = () => {
             textAlign: 'left',
             fontWeight: 'bold',
             textShadow: '2px 2px black',
+        },
+        appVersionText: { 
+            textAlign: 'left',
+            fontWeight: 'bold',
+            textShadow: '2px 2px black',
+            fontSize: '60%',
+            padding: '1%',
         }
     }
 
@@ -70,6 +78,9 @@ const LandingPage = () => {
                     connectToMetamask();
                 }}
             />
+            <div style={styles.appVersionText}>
+                v{packageJson.version}
+            </div>
         </div>
     );
 }
