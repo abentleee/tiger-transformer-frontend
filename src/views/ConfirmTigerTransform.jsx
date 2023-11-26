@@ -69,8 +69,6 @@ const ConfirmTigerTransformation = () => {
         const xDaiTigerContract = getContract(xDaiTigerAddress, xDaiTigerABI, provider);
         const gnosisTigerContract = getContract(gnosisTigerAddress, gnosisTigerABI, provider);
         
-        const signer = provider.getSigner(selectedAccount);
-        const transformContract = getContract(transformContractAddress, transformContractABI, signer);
 
         if (isTransforming) { 
             return (
@@ -129,16 +127,22 @@ const ConfirmTigerTransformation = () => {
                 <div style={styles.buttonRowContainer}>
                     <Button 
                         text={'TRANSFORM'}
-                        onClick={() => {
+                        onClick={async () => {
                             setIsTransforming(true);
 
                             if (selectedTiger.isXDaiTiger) { 
+                                console.log("calling Nft2Dto3D contract");
+
+                                const signer = await provider.getSigner(selectedAccount);
+                                const transformContract = getContract(transformContractAddress, transformContractABI, signer);
+
                                 transformContract.Nft2DTo3D(selectedTiger.id)
                                     .then((resp) => {
                                         const txHash = resp.hash;
                                         setTransactionHash(txHash);
                                         provider.waitForTransaction(txHash)
                                             .then((receipt) => {
+                                                console.log(`transaction receipt for ${txHash}: ${JSON.stringify(receipt)}`);
                                                 gnosisTigerContract.tokenURI(selectedTiger.id)
                                                     .then((resp) => {
                                                         const ipfsHash = resp.replace('ipfs://', '');
@@ -185,6 +189,10 @@ const ConfirmTigerTransformation = () => {
                             }
                             else { 
                                 console.log("calling Nft3Dto32 contract");
+                                
+                                const signer = await provider.getSigner(selectedAccount);
+                                const transformContract = getContract(transformContractAddress, transformContractABI, signer);
+
                                 transformContract.Nft3DTo2D(selectedTiger.id)
                                     .then((resp) => {
                                         console.log('3D->2D response: '+JSON.stringify(resp));

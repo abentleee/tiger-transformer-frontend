@@ -10,6 +10,7 @@ const LandingPage = () => {
     const connectToMetamask = async () => { 
         try {         
             const provider = getProvider();
+            console.log(`provider: ${JSON.stringify(provider)}`)
             const accounts = await provider.send("eth_requestAccounts", []);
             console.log(`accounts: ${JSON.stringify(accounts)}`)
 
@@ -22,7 +23,7 @@ const LandingPage = () => {
                 navigate('/wrong-blockchain-error', {state: {networkName: network.name}});
             }
         } catch (ex) { 
-            console.error(`exception caught during wallet connection: ${ex.reason}`);
+            console.error(`exception caught during wallet connection: ${ex}`);
             if(ex.reason === 'missing provider') { 
                 navigate('/metamask-error')
             }
