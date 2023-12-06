@@ -7,6 +7,7 @@ import transformContractABI from '../assets/transformContractAbi.json';
 import xDaiTigerABI from '../assets/xDaiContractAbi.json';
 import gnosisTigerABI from '../assets/gnosisContractAbi.json';
 import { Dna } from 'react-loader-spinner';
+import { logSuccessfulTigerTransformation } from '../utils/MetricUtils';
 
 const ConfirmTigerTransformation = () => { 
     const location = useLocation();
@@ -145,6 +146,13 @@ const ConfirmTigerTransformation = () => {
                                                 console.log(`transaction receipt for ${txHash}: ${JSON.stringify(receipt)}`);
                                                 gnosisTigerContract.tokenURI(selectedTiger.id)
                                                     .then((resp) => {
+                                                        logSuccessfulTigerTransformation(
+                                                            selectedAccount,
+                                                            txHash,
+                                                            selectedTiger.id,
+                                                            false,
+                                                        );
+
                                                         const ipfsHash = resp.replace('ipfs://', '');
                                                         fetch(`https://ipfs.io/ipfs/${ipfsHash}`)
                                                         .then((resp) => resp.json())
@@ -203,6 +211,13 @@ const ConfirmTigerTransformation = () => {
                                                 console.log(`transaction receipt for ${txHash}: ${JSON.stringify(receipt)}`);
                                                 xDaiTigerContract.tokenURI(selectedTiger.id)
                                                     .then((resp) => {
+                                                        logSuccessfulTigerTransformation(
+                                                            selectedAccount,
+                                                            txHash,
+                                                            selectedTiger.id,
+                                                            true,
+                                                        );
+
                                                         const ipfsHash = resp.replace('ipfs://', '');
                                                         fetch(`https://ipfs.io/ipfs/${ipfsHash}`)
                                                         .then((resp) => resp.json())
