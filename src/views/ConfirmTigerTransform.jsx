@@ -77,7 +77,11 @@ const ConfirmTigerTransformation = () => {
             return (
                 <div style={styles.container}>
                     <div style={styles.headerText}>
-                        Your tiger is being transformed, just a moment...
+                        Your tiger is being transformed, this may take a few minutes...
+                        <br /><br/>
+                        You will need to accept the transaction from your Metamask wallet. 
+                        <br/>
+                        Make sure your popup blocker is disabled!
                     </div>
                     <div style={styles.tigerContainer}>
                         <Dna

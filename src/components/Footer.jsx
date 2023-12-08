@@ -72,15 +72,15 @@ const Footer = () => {
                         Transformer 2.0 Development
                     </div>
                     <div >
-                        Contributor#1234
+                        ☀ B3NNY | xDai Tigers#9736
                         <br/>
                         Contributor#1234
                         <br />
                         Contributor#1234
                         <br/>
-                        Contributor#1234
+                        <a href="https://github.com/abentleee" target="_blank" rel="noopener noreferrer">abentleee</a>
                         <br/>
-                        Contributor#1234
+                        <a href="https://github.com/abentleee" target="_blank" rel="noopener noreferrer">abentleee</a>
                     </div>
                 </div>
             </Modal>
