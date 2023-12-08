@@ -30,8 +30,6 @@ export const logSuccessfulTigerTransformation = async (
         body: JSON.stringify(requestBody)
     };
 
-    console.log(`sending request to ${host} with options ${JSON.stringify(options)}`);
-
     await fetch(host, options);    
 }
 
