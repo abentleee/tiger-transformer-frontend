@@ -1,6 +1,6 @@
 {
   "name": "tiger-transformer-frontend",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
@@ -19,7 +19,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "mv ./.env ../.env; react-scripts buil; mv ../.env ./.env",
+    "build": "mv ./.env ../.env; react-scripts build; mv ../.env ./.env",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

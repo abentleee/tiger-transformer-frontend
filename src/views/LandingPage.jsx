@@ -7,6 +7,8 @@ import packageJson from '../../package.json'
 const LandingPage = () => {
     const navigate = useNavigate();
 
+    console.log(`ipfs gateways: ${process.env.REACT_APP_IPFS_GATEWAYS}`);
+
     const connectToMetamask = async () => { 
         try {         
             const provider = getProvider();
