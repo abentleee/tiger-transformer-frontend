@@ -7,6 +7,7 @@ import { Tiger } from '../models/Tiger';
 
 import xDaiTigerABI from '../assets/xDaiContractAbi.json';
 import gnosisTigerABI from '../assets/gnosisContractAbi.json';
+import { logError } from '../utils/MetricUtils';
 
 const ListAllTigers = () => {
     const location = useLocation();
@@ -24,6 +25,8 @@ const ListAllTigers = () => {
     const [selectedTiger, setSelectedTiger] = useState({}); 
     const [isLookupCallComplete, setIsLookupCallComplete] = useState(false);
 
+    const ipfsGateways = process.env.REACT_APP_IPFS_GATEWAYS.split(',');
+
     const retrieveTigers = async () => { 
         //confirm state reset each time we load tigers
         await resetState();
@@ -34,12 +37,16 @@ const ListAllTigers = () => {
                 xDaiTokenIds.forEach(tokenId => { 
                     xDaiTigerContract.tokenURI(tokenId).then((resp) => { 
                         const ipfsHash = resp.replace('ipfs://', '')
-                        fetch(`https://ipfs.io/ipfs/${ipfsHash}`)
+                        fetch(`${ipfsGateways[0]}/ipfs/${ipfsHash}`)
                             .then((resp) => resp.json())
                             .then((resp) => { 
-                                const imageUrl = `https://ipfs.io/ipfs/${resp.image.replace('ipfs://', '')}`;
+                                const imageUrl = `${ipfsGateways[0]}/ipfs/${resp.image.replace('ipfs://', '')}`;
                                 const xDaiTiger = new Tiger(tokenId, imageUrl, true);
                                 setXDaiTigers((xDaiTigers) => ([...xDaiTigers, xDaiTiger]));
+                            })
+                            .catch(e => {
+                                console.error(`error fetching 2d tiger images: ${JSON.stringify(e)}`);
+                                logError(location.state.selectedAccount,'N/A',tokenId, false, e.message);
                             });
                     });
                 });
@@ -51,20 +58,30 @@ const ListAllTigers = () => {
                         gnosisTokenIds.forEach((tokenId => { 
                             gnosisTigerContract.tokenURI(tokenId).then((resp) => { 
                             const ipfsHash = resp.replace('ipfs://', '')
-                            fetch(`https://ipfs.io/ipfs/${ipfsHash}`)
+                            fetch(`${ipfsGateways[0]}/ipfs/${ipfsHash}`)
                                 .then((resp) => resp.json())
                                 .then((resp) => { 
-                                    const imageUrl = `https://ipfs.io/ipfs/${resp.image.replace('ipfs://', '')}`;
+                                    const imageUrl = `${ipfsGateways[0]}/ipfs/${resp.image.replace('ipfs://', '')}`;
                                     const gnosisTiger = new Tiger(tokenId, imageUrl, false);
                                     setGnosisTigers((gnosisTigers) => ([...gnosisTigers, gnosisTiger]));
+                                })
+                                .catch(e => {
+                                    console.error(`error fetching 3d tiger images: ${JSON.stringify(e)}`);
+                                    logError(location.state.selectedAccount,'N/A',tokenId, true, e.message);
                                 });
+                                
                             });
                         }));
                         setIsLookupCallComplete(true);
+                    })
+                    .catch((err) => {
+                        console.error(`error calling 3d walletOfOwner: ${JSON.stringify(err)}`);
+                        logError(location.state.selectedAccount,'N/A','N/A', true, err.message);
                     });
             })
             .catch((err) => {
-                console.error(`error calling walletOfOwner: ${JSON.stringify(err)}`);
+                console.error(`error calling 2d walletOfOwner: ${JSON.stringify(err)}`);
+                logError(location.state.selectedAccount,'N/A','N/A', false, err.message);
             });
     };
 

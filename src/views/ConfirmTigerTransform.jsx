@@ -7,7 +7,7 @@ import transformContractABI from '../assets/transformContractAbi.json';
 import xDaiTigerABI from '../assets/xDaiContractAbi.json';
 import gnosisTigerABI from '../assets/gnosisContractAbi.json';
 import { Dna } from 'react-loader-spinner';
-import { logSuccessfulTigerTransformation } from '../utils/MetricUtils';
+import { logError, logSuccessfulTigerTransformation } from '../utils/MetricUtils';
 
 const ConfirmTigerTransformation = () => { 
     const location = useLocation();
@@ -20,6 +20,8 @@ const ConfirmTigerTransformation = () => {
 
     const [isTransforming, setIsTransforming] = useState(false);
     const [transactionHash, setTransactionHash] = useState('');
+
+    const ipfsGateways = process.env.REACT_APP_IPFS_GATEWAYS.split(',');
 
     const styles = { 
         container: { 
@@ -154,10 +156,10 @@ const ConfirmTigerTransformation = () => {
                                                         );
 
                                                         const ipfsHash = resp.replace('ipfs://', '');
-                                                        fetch(`https://ipfs.io/ipfs/${ipfsHash}`)
+                                                        fetch(`${ipfsGateways[0]}/ipfs/${ipfsHash}`)
                                                         .then((resp) => resp.json())
                                                         .then((resp) => { 
-                                                            const imageUrl = `https://ipfs.io/ipfs/${resp.image.replace('ipfs://', '')}`;
+                                                            const imageUrl = `${ipfsGateways[0]}/ipfs/${resp.image.replace('ipfs://', '')}`;
                                                             navigate('/display-transformation', {
                                                                 state: { 
                                                                     id: selectedTiger.id,
@@ -170,10 +172,10 @@ const ConfirmTigerTransformation = () => {
                                                         }).catch((error) => {
                                                             // retry image load once, then bail if it don't work
                                                             const ipfsHash = resp.replace('ipfs://', '');
-                                                            fetch(`https://ipfs.io/ipfs/${ipfsHash}`)
+                                                            fetch(`${ipfsGateways[0]}/ipfs.io/ipfs/${ipfsHash}`)
                                                             .then((resp) => resp.json())
                                                             .then((resp) => { 
-                                                                const imageUrl = `https://ipfs.io/ipfs/${resp.image.replace('ipfs://', '')}`;
+                                                                const imageUrl = `${ipfsGateways[0]}/ipfs/${resp.image.replace('ipfs://', '')}`;
                                                                 navigate('/display-transformation', {
                                                                     state: { 
                                                                         id: selectedTiger.id,
@@ -189,9 +191,15 @@ const ConfirmTigerTransformation = () => {
                                                         });
                                                     })
                                             })
+                                            .catch((err) => { 
+                                                console.error(`error caught during 2d waitForTransaction: ${err}`);
+                                                logError(selectedAccount, txHash, selectedTiger.id, false, err.message);
+                                                setIsTransforming(false);
+                                            });
                                     }).catch(err => {
                                         console.log('error caught on Nft2D->3D transform');
                                         console.error(err);
+                                        logError(selectedAccount, 'N/A', selectedTiger.id, false, err.message);
                                         setIsTransforming(false);
                                     });
                             }
@@ -219,10 +227,10 @@ const ConfirmTigerTransformation = () => {
                                                         );
 
                                                         const ipfsHash = resp.replace('ipfs://', '');
-                                                        fetch(`https://ipfs.io/ipfs/${ipfsHash}`)
+                                                        fetch(`${ipfsGateways[0]}/ipfs/${ipfsHash}`)
                                                         .then((resp) => resp.json())
                                                         .then((resp) => { 
-                                                            const imageUrl = `https://ipfs.io/ipfs/${resp.image.replace('ipfs://', '')}`;
+                                                            const imageUrl = `${ipfsGateways[0]}/ipfs/${resp.image.replace('ipfs://', '')}`;
                                                             navigate('/display-transformation', {
                                                                 state: { 
                                                                     id: selectedTiger.id,
@@ -235,10 +243,10 @@ const ConfirmTigerTransformation = () => {
                                                         }).catch((error) => { 
                                                             // retry image load once, then bail if it don't work
                                                             const ipfsHash = resp.replace('ipfs://', '');
-                                                            fetch(`https://ipfs.io/ipfs/${ipfsHash}`)
+                                                            fetch(`${ipfsGateways[0]}/ipfs/${ipfsHash}`)
                                                             .then((resp) => resp.json())
                                                             .then((resp) => { 
-                                                                const imageUrl = `https://ipfs.io/ipfs/${resp.image.replace('ipfs://', '')}`;
+                                                                const imageUrl = `${ipfsGateways[0]}/ipfs/${resp.image.replace('ipfs://', '')}`;
                                                                 navigate('/display-transformation', {
                                                                     state: { 
                                                                         id: selectedTiger.id,
@@ -253,10 +261,16 @@ const ConfirmTigerTransformation = () => {
                                                             });
                                                         });
                                                     })
+                                            })
+                                            .catch((err) => {
+                                                console.error(`error caught during 3d waitForTransaction: ${err}`);
+                                                logError(selectedAccount, txHash, selectedTiger.id, true, err.message);
+                                                setIsTransforming(false);
                                             });
                                     }).catch(err => {
                                         console.log('error caught on Nft3D->2D transform');
                                         console.error(err);
+                                        logError(selectedAccount, 'N/A', selectedTiger.id, true, err.message);
                                         setIsTransforming(false);
                                     });
                             } 
