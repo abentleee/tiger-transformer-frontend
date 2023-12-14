@@ -15,6 +15,7 @@ export const logSuccessfulTigerTransformation = async (
 
     const authorization = `Basic ${base64Encode(username + ':' + password)}`;
     const requestBody = {
+        browserInfo: navigator.userAgent,
         walletAddress,
         txHash,
         tigerId,
@@ -49,6 +50,7 @@ export const logError = async (
 
     const authorization = `Basic ${base64Encode(username + ':' + password)}`;
     const requestBody = {
+        browserInfo: navigator.userAgent,
         walletAddress,
         txHash,
         tigerId,
