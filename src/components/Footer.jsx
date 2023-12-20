@@ -78,9 +78,9 @@ const Footer = () => {
                         <br />
                         Contributor#1234
                         <br/>
-                        <a href="https://github.com/abentleee" target="_blank" rel="noopener noreferrer">abentleee</a>
+                        <a href="https://github.com/abentleee" target="_blank" rel="noopener noreferrer">abentleee | BeachSleeper Development</a>
                         <br/>
-                        <a href="https://github.com/abentleee" target="_blank" rel="noopener noreferrer">abentleee</a>
+                        <a href="https://github.com/abentleee" target="_blank" rel="noopener noreferrer">abentleee | BeachSleeper Development</a>
                     </div>
                 </div>
             </Modal>
