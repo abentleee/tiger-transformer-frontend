@@ -208,10 +208,9 @@ const ListAllTigers = () => {
                     <div style={styles.allTigersContainer}>
                         {xDaiTigers.map((xDaiTiger) => { 
                                 return (
-                                    <>
+                                    <div key={xDaiTiger.id}>
                                         <img 
                                             src={xDaiTiger.imageUrl}
-                                            key={xDaiTiger.id}
                                             alt={xDaiTiger.id}
                                             style={(selectedTiger.id === xDaiTiger.id) ? styles.selectedTigerImage : styles.tigerImage}
                                             onClick={() => {
@@ -222,16 +221,18 @@ const ListAllTigers = () => {
                                                 }
                                             }}
                                         />
-                                    </>
+                                        <div style={styles.bodyText}>
+                                            {xDaiTiger.id}
+                                        </div>
+                                    </div>
                                 );
                             })
                         }
                         {gnosisTigers.map((gnosisTiger) => { 
                                 return (
-                                    <>
+                                    <div key={gnosisTiger.id}>
                                         <img 
                                             src={gnosisTiger.imageUrl}
-                                            key={gnosisTiger.id}
                                             alt={gnosisTiger.id}
                                             style={(selectedTiger.id === gnosisTiger.id) ? styles.selectedTigerImage : styles.tigerImage}
                                             onClick={() => {
@@ -242,7 +243,10 @@ const ListAllTigers = () => {
                                                 }
                                             }}
                                         />
-                                    </>
+                                        <div style={styles.bodyText}>
+                                            {gnosisTiger.id}
+                                        </div>
+                                    </div>
                                 );
                             })
                         }
@@ -250,9 +254,6 @@ const ListAllTigers = () => {
                     <div style={styles.selectedTigerContainer}>
                         {selectedTiger.id && (
                             <>
-                                <div style={styles.bodyText}>
-                                    {selectedTiger.id}
-                                </div>
                                 <div style={styles.buttonRowContainer}>
                                     <Button 
                                         text={'TRANSFORM'}
